@@ -154,7 +154,7 @@
     font-weight: 600;
   }
 
-  .banner-cancelado {
+  .banner-cancelado, .banner-nao-iniciado {
     background: rgba(184, 141, 70, 0.12);
     border: 1px solid var(--gold);
     border-radius: 10px;
@@ -373,6 +373,10 @@
       Este processo foi cancelado. Qualquer dúvida, fale diretamente com seu corretor pelos contatos abaixo.
     </div>
 
+    <div id="banner-nao-iniciado" class="banner-nao-iniciado oculto">
+      O processo ainda não foi iniciado — <span id="motivo-nao-iniciado"></span>.
+    </div>
+
     <div class="progresso-wrap">
       <div class="progresso-legenda">
         <span>Progresso do processo</span>
@@ -430,6 +434,11 @@
 
     if (dados.cancelado) {
       document.getElementById('banner-cancelado').classList.remove('oculto');
+    }
+
+    if (dados.nao_iniciado) {
+      document.getElementById('motivo-nao-iniciado').textContent = dados.status_geral || 'aguardando retorno do cliente';
+      document.getElementById('banner-nao-iniciado').classList.remove('oculto');
     }
 
     var timeline = document.getElementById('timeline');

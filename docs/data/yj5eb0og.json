@@ -6,12 +6,13 @@
   "status_geral": "Aguardando Pagamento",
   "cancelado": false,
   "finalizado": false,
+  "nao_iniciado": true,
   "data_contrato": "15/03/2026",
   "progresso_pct": 0,
   "etapas": [
     {
       "nome": "Solicitação do ITBI",
-      "status": "andamento",
+      "status": "pendente",
       "data": null,
       "observacao": null
     },

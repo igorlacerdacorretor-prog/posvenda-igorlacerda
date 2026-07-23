@@ -6,6 +6,7 @@
   "status_geral": "Finalizado",
   "cancelado": false,
   "finalizado": true,
+  "nao_iniciado": false,
   "data_contrato": "11/03/2026",
   "progresso_pct": 100,
   "etapas": [

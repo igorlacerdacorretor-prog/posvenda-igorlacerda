@@ -6,12 +6,13 @@
   "status_geral": "Aguardando Documentação",
   "cancelado": false,
   "finalizado": false,
+  "nao_iniciado": true,
   "data_contrato": "28/01/2026",
   "progresso_pct": 0,
   "etapas": [
     {
       "nome": "Envio de documentos do comprador",
-      "status": "andamento",
+      "status": "pendente",
       "data": null,
       "observacao": null
     },

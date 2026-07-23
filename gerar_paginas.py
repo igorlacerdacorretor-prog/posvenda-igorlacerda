@@ -88,6 +88,10 @@ ETAPAS_A_VISTA = [
 
 CODIGO_ALFABETO = string.ascii_lowercase + string.digits
 
+# Status gerais que significam "processo ainda não começou" -- nenhuma etapa
+# deve aparecer como "em andamento" nesses casos.
+STATUS_NAO_INICIADO = {"aguardando documentação", "aguardando pagamento"}
+
 
 def carregar_config() -> dict:
     if CONFIG_PATH.exists():
@@ -194,9 +198,11 @@ def calcular_dias(data_contrato_raw, datas_concluidas_raw: list, finalizado: boo
     return {"dias": dias, "rotulo": f"{dias} dias em andamento"}
 
 
-def etapa_atual_de(etapas: list[dict], progresso_pct: int, cancelado: bool) -> str:
+def etapa_atual_de(etapas: list[dict], progresso_pct: int, cancelado: bool, nao_iniciado: bool, status_geral: str) -> str:
     if cancelado:
         return "Cancelado"
+    if nao_iniciado:
+        return status_geral or "Aguardando início"
     for etapa in etapas:
         if etapa["status"] == "andamento":
             return etapa["nome"]
@@ -305,15 +311,22 @@ def processar(caminho_excel: str, aba: str) -> None:
 
         cancelado = status_geral.lower() == "cancelado"
         finalizado = status_geral.lower() == "finalizado"
-        if cancelado:
+        nao_iniciado = status_geral.lower() in STATUS_NAO_INICIADO
+        if cancelado or nao_iniciado:
             for etapa in etapas:
                 if etapa["status"] == "andamento":
                     etapa["status"] = "pendente"
 
         # Quando a venda está marcada como "Finalizado" na planilha, a barra
         # de progresso mostra 100% (verde), mesmo que alguma etapa individual
-        # tenha ficado sem data preenchida.
-        progresso_pct = 100 if finalizado else calcular_progresso(etapas)
+        # tenha ficado sem data preenchida. Quando está "Aguardando
+        # Documentação/Pagamento", o processo ainda não começou de fato.
+        if finalizado:
+            progresso_pct = 100
+        elif nao_iniciado:
+            progresso_pct = 0
+        else:
+            progresso_pct = calcular_progresso(etapas)
 
         datas_concluidas_raw = [
             ws[f"{coluna}{numero_linha}"].value for coluna, _n, _a in definicoes
@@ -328,6 +341,7 @@ def processar(caminho_excel: str, aba: str) -> None:
             "status_geral": status_geral or None,
             "cancelado": cancelado,
             "finalizado": finalizado,
+            "nao_iniciado": nao_iniciado,
             "data_contrato": valor_data(data_contrato),
             "progresso_pct": progresso_pct,
             "etapas": etapas,
@@ -350,7 +364,7 @@ def processar(caminho_excel: str, aba: str) -> None:
                 "forma_pagamento": dados_cliente["forma_pagamento"],
                 "progresso_pct": progresso_pct,
                 "cancelado": cancelado,
-                "etapa_atual": "Finalizado" if finalizado else etapa_atual_de(etapas, progresso_pct, cancelado),
+                "etapa_atual": "Finalizado" if finalizado else etapa_atual_de(etapas, progresso_pct, cancelado, nao_iniciado, status_geral),
                 "dias_rotulo": dias_info["rotulo"] if dias_info else None,
             }
         )

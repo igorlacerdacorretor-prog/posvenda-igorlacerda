@@ -6,12 +6,13 @@
   "status_geral": "Aguardando Documentação",
   "cancelado": false,
   "finalizado": false,
+  "nao_iniciado": true,
   "data_contrato": "09/01/2026",
   "progresso_pct": 0,
   "etapas": [
     {
       "nome": "Solicitação do ITBI",
-      "status": "andamento",
+      "status": "pendente",
       "data": null,
       "observacao": null
     },

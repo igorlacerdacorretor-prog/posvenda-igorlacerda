@@ -10,3 +10,6 @@ painel.html
 
 # Arquivos temporários do Excel
 ~$*
+
+# Atalhos do Windows não devem ir para o repositório
+*.lnk
