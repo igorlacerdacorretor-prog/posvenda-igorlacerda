@@ -16,7 +16,7 @@ if ($LASTEXITCODE -ne 0) {
 }
 
 Write-Host "Enviando atualização para o GitHub..." -ForegroundColor Cyan
-git add site/data "codigos_clientes.csv"
+git add docs/data "codigos_clientes.csv"
 git commit -m "Atualiza pos-venda - $(Get-Date -Format 'dd/MM/yyyy HH:mm')"
 git push
 

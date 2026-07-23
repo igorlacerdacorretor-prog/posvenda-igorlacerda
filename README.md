@@ -8,8 +8,8 @@ outro cliente.
 ## Como funciona
 
 - `gerar_paginas.py` lê a aba **"Pós Venda 2026"** do seu Excel e gera um
-  arquivo `site/data/<codigo>.json` para cada venda.
-- `site/pagina.html` é a página única que todos os clientes usam. Ela lê o
+  arquivo `docs/data/<codigo>.json` para cada venda.
+- `docs/pagina.html` é a página única que todos os clientes usam. Ela lê o
   parâmetro `?id=` da URL, busca o JSON correspondente e monta a timeline.
 - `codigos_clientes.csv` guarda a relação `Nº Venda → código`, para que o
   link de um cliente **nunca mude**, mesmo depois de rodar o script várias
@@ -53,7 +53,7 @@ arquivo e rode:
 python gerar_paginas.py "Pós Venda 2026.xlsx"
 ```
 
-Isso atualiza tudo dentro de `site/data/` e mostra no terminal a lista de
+Isso atualiza tudo dentro de `docs/data/` e mostra no terminal a lista de
 links prontos (também salva em `links_para_enviar.csv`).
 
 Se o nome da aba for diferente, informe com `--aba`:
@@ -71,14 +71,14 @@ python gerar_paginas.py "Pós Venda 2026.xlsx" --aba "Pós Venda 2027"
    ```bash
    git init
    git remote add origin https://github.com/SEU-USUARIO/SEU-REPOSITORIO.git
-   git add gerar_paginas.py publicar.ps1 config.json .gitignore codigos_clientes.csv README.md site
+   git add gerar_paginas.py publicar.ps1 config.json .gitignore codigos_clientes.csv README.md docs
    git commit -m "Primeira versão do site de pós-venda"
    git branch -M main
    git push -u origin main
    ```
 
 3. No GitHub, vá em **Settings → Pages**, em "Build and deployment" escolha
-   **Deploy from a branch**, selecione a branch `main` e a pasta `/site`,
+   **Deploy from a branch**, selecione a branch `main` e a pasta `/docs`,
    e salve.
 4. Depois de ~1 minuto, o GitHub mostra a URL do site (algo como
    `https://seu-usuario.github.io/seu-repositorio/`). Atualize o
@@ -104,20 +104,20 @@ Se preferir fazer manualmente:
 
 ```bash
 python gerar_paginas.py "Pós Venda 2026.xlsx"
-git add site/data codigos_clientes.csv
+git add docs/data codigos_clientes.csv
 git commit -m "Atualiza pós-venda"
 git push
 ```
 
 ## Logo
 
-Coloque o arquivo `Igor_Lacerda_MD_1.png` dentro de `site/assets/`. Se o
+Coloque o arquivo `Igor_Lacerda_MD_1.png` dentro de `docs/assets/`. Se o
 arquivo não existir, a página funciona normalmente, só sem a logo no topo.
 
 ## Fonte "Ametis"
 
 Ametis não está disponível via CDN público. Se você tiver os arquivos da
-fonte (`.woff2`), coloque-os em `site/assets/fonts/` e descomente o bloco
+fonte (`.woff2`), coloque-os em `docs/assets/fonts/` e descomente o bloco
 `@font-face` no início do `<style>` de `pagina.html`. Sem isso, os títulos
 usam **Poppins** (via Google Fonts) como substituta visualmente próxima.
 

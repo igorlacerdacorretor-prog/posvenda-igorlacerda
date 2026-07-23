@@ -176,7 +176,7 @@ def processar(caminho_excel: str, aba: str) -> None:
     codigos = carregar_codigos()
     codigos_em_uso = set(codigos.values())
 
-    pasta_dados = BASE_DIR / "site" / "data"
+    pasta_dados = BASE_DIR / "docs" / "data"
     pasta_dados.mkdir(parents=True, exist_ok=True)
 
     linhas_geradas = []
