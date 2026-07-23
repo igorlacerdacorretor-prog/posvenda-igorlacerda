@@ -36,6 +36,7 @@ BASE_DIR = Path(__file__).resolve().parent
 CODIGOS_PATH = BASE_DIR / "codigos_clientes.csv"
 CONFIG_PATH = BASE_DIR / "config.json"
 LINKS_PATH = BASE_DIR / "links_para_enviar.csv"
+PAINEL_PATH = BASE_DIR / "painel.html"
 
 DEFAULT_ABA = "Pós Venda 2026"
 PRIMEIRA_LINHA_DADOS = 3  # linha 1 = título dos grupos, linha 2 = cabeçalho, linha 3 = 1ª venda
@@ -164,6 +165,74 @@ def calcular_progresso(etapas: list[dict]) -> int:
     return round(100 * concluidas / len(etapas))
 
 
+def etapa_atual_de(etapas: list[dict], progresso_pct: int, cancelado: bool) -> str:
+    if cancelado:
+        return "Cancelado"
+    for etapa in etapas:
+        if etapa["status"] == "andamento":
+            return etapa["nome"]
+    if progresso_pct >= 100:
+        return "Concluído"
+    return etapas[0]["nome"] if etapas else "—"
+
+
+def montar_painel(clientes: list[dict]) -> None:
+    linhas_html = []
+    for c in clientes:
+        cor_status = "#b88d46" if c["cancelado"] else ("#ffeca3" if c["progresso_pct"] < 100 else "#7fd88f")
+        linhas_html.append(f"""
+        <tr>
+          <td class="nome">
+            {c['cliente']}
+            <span class="sub">{c['imovel'] or ''}{' · ' if c['imovel'] and c['forma_pagamento'] else ''}{c['forma_pagamento'] or ''}</span>
+          </td>
+          <td>
+            <div class="barra"><div class="barra-fill" style="width:{c['progresso_pct']}%; background:{cor_status}"></div></div>
+            <span class="pct">{c['progresso_pct']}%</span>
+          </td>
+          <td class="etapa-atual" style="color:{cor_status}">{c['etapa_atual']}</td>
+          <td><a class="link" href="{c['link']}" target="_blank" rel="noopener">Abrir página ↗</a></td>
+        </tr>""")
+
+    html = f"""<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Painel interno | Pós-Venda</title>
+<style>
+  body {{ margin:0; background:#162333; color:#f4f2ec; font-family: Arial, Montserrat, sans-serif; padding: 32px 24px; }}
+  h1 {{ font-size: 1.3rem; margin-bottom: 4px; }}
+  .aviso {{ color:#8a97a8; font-size: 0.82rem; margin-bottom: 28px; }}
+  table {{ width: 100%; border-collapse: collapse; }}
+  th {{ text-align: left; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color:#8a97a8; padding: 8px 12px; border-bottom: 1px solid #3a4a5f; }}
+  td {{ padding: 14px 12px; border-bottom: 1px solid #1e3049; vertical-align: middle; font-size: 0.9rem; }}
+  .nome {{ display:flex; flex-direction:column; gap:2px; }}
+  .sub {{ font-size: 0.76rem; color:#8a97a8; }}
+  .barra {{ width: 120px; height:6px; border-radius:999px; background:#1e3049; overflow:hidden; display:inline-block; vertical-align:middle; }}
+  .barra-fill {{ height:100%; border-radius:999px; }}
+  .pct {{ margin-left: 8px; font-size: 0.8rem; color:#8a97a8; }}
+  .etapa-atual {{ font-weight: 600; }}
+  .link {{ color:#ffeca3; text-decoration:none; font-size:0.85rem; }}
+  .link:hover {{ text-decoration:underline; }}
+</style>
+</head>
+<body>
+  <h1>Painel interno — Pós-Venda</h1>
+  <p class="aviso">Uso pessoal. Este arquivo não é público e não deve ser enviado a clientes. Gerado em {date.today().strftime('%d/%m/%Y')}.</p>
+  <table>
+    <thead>
+      <tr><th>Cliente</th><th>Progresso</th><th>Etapa atual</th><th>Link</th></tr>
+    </thead>
+    <tbody>
+      {''.join(linhas_html)}
+    </tbody>
+  </table>
+</body>
+</html>
+"""
+    PAINEL_PATH.write_text(html, encoding="utf-8")
+
+
 def processar(caminho_excel: str, aba: str) -> None:
     wb = load_workbook(caminho_excel, data_only=True)
     if aba not in wb.sheetnames:
@@ -228,7 +297,17 @@ def processar(caminho_excel: str, aba: str) -> None:
 
         link = f"{config['base_url']}?id={codigo}"
         linhas_geradas.append(
-            {"numero_venda": numero_venda_str, "cliente": nome, "codigo": codigo, "link": link}
+            {
+                "numero_venda": numero_venda_str,
+                "cliente": nome,
+                "codigo": codigo,
+                "link": link,
+                "imovel": dados_cliente["imovel"],
+                "forma_pagamento": dados_cliente["forma_pagamento"],
+                "progresso_pct": dados_cliente["progresso_pct"],
+                "cancelado": cancelado,
+                "etapa_atual": etapa_atual_de(etapas, dados_cliente["progresso_pct"], cancelado),
+            }
         )
 
     salvar_codigos(codigos)
@@ -236,10 +315,16 @@ def processar(caminho_excel: str, aba: str) -> None:
     with open(LINKS_PATH, "w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=["numero_venda", "cliente", "codigo", "link"])
         writer.writeheader()
-        writer.writerows(linhas_geradas)
+        for linha in linhas_geradas:
+            writer.writerow(
+                {k: linha[k] for k in ("numero_venda", "cliente", "codigo", "link")}
+            )
+
+    montar_painel(linhas_geradas)
 
     print(f"\n{len(linhas_geradas)} página(s) de cliente geradas em docs/data/")
-    print(f"Links prontos para enviar: {LINKS_PATH.name}\n")
+    print(f"Links prontos para enviar: {LINKS_PATH.name}")
+    print(f"Painel interno (só seu): {PAINEL_PATH.name}\n")
     for linha in linhas_geradas:
         print(f"  {linha['cliente']}: {linha['link']}")
 

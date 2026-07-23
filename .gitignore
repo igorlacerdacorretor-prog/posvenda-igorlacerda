@@ -1,6 +1,9 @@
 # Contém nomes de clientes junto com o link secreto de cada um -- não publicar.
 links_para_enviar.csv
 
+# Painel interno com todos os clientes de uma vez -- uso pessoal, nunca publicar.
+painel.html
+
 # Planilhas originais do CRM não devem ir para o repositório (dados sensíveis).
 *.xlsx
 *.xls
