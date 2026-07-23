@@ -7,7 +7,7 @@
   "cancelado": false,
   "finalizado": false,
   "data_contrato": "28/05/2026",
-  "progresso_pct": 12,
+  "progresso_pct": 6,
   "etapas": [
     {
       "nome": "Envio de documentos do comprador",
@@ -17,13 +17,13 @@
     },
     {
       "nome": "Aprovação do crédito",
-      "status": "concluido",
-      "data": "23/07/2026",
+      "status": "andamento",
+      "data": null,
       "observacao": null
     },
     {
       "nome": "Envio de documentos do vendedor",
-      "status": "andamento",
+      "status": "pendente",
       "data": null,
       "observacao": null
     },
