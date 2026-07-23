@@ -1,0 +1,115 @@
+{
+  "codigo": "b45xmokz",
+  "cliente": "Natan Junior Santos",
+  "imovel": "Apto",
+  "forma_pagamento": "Financiamento",
+  "status_geral": "Em Andamento",
+  "cancelado": false,
+  "data_contrato": "20/05/2026",
+  "progresso_pct": 76,
+  "etapas": [
+    {
+      "nome": "Envio de documentos do comprador",
+      "status": "concluido",
+      "data": "18/05/2026",
+      "observacao": null
+    },
+    {
+      "nome": "Aprovação do crédito",
+      "status": "concluido",
+      "data": "19/05/2026",
+      "observacao": null
+    },
+    {
+      "nome": "Envio de documentos do vendedor",
+      "status": "concluido",
+      "data": "21/05/2026",
+      "observacao": null
+    },
+    {
+      "nome": "Vistoria do engenheiro",
+      "status": "concluido",
+      "data": "27/05/2026",
+      "observacao": null
+    },
+    {
+      "nome": "Aprovação do laudo de engenharia",
+      "status": "concluido",
+      "data": "11/06/2026",
+      "observacao": null
+    },
+    {
+      "nome": "Entrega ao correspondente bancário",
+      "status": "concluido",
+      "data": "25/06/2026",
+      "observacao": null
+    },
+    {
+      "nome": "Conformidade da documentação",
+      "status": "concluido",
+      "data": "08/07/2026",
+      "observacao": null
+    },
+    {
+      "nome": "Entrevista gerencial",
+      "status": "concluido",
+      "data": "13/07/2026",
+      "observacao": null
+    },
+    {
+      "nome": "Assinatura do contrato",
+      "status": "concluido",
+      "data": "17/07/2026",
+      "observacao": null
+    },
+    {
+      "nome": "Solicitação do ITBI",
+      "status": "concluido",
+      "data": "17/07/2026",
+      "observacao": null
+    },
+    {
+      "nome": "Pagamento do ITBI",
+      "status": "concluido",
+      "data": "22/07/2026",
+      "observacao": null
+    },
+    {
+      "nome": "Certidão de quitação do ITBI",
+      "status": "concluido",
+      "data": "23/07/2026",
+      "observacao": null
+    },
+    {
+      "nome": "Prenotação em cartório",
+      "status": "concluido",
+      "data": "23/07/2026",
+      "observacao": null
+    },
+    {
+      "nome": "Pagamento do registro",
+      "status": "andamento",
+      "data": null,
+      "observacao": null
+    },
+    {
+      "nome": "Registro do imóvel concluído",
+      "status": "pendente",
+      "data": null,
+      "observacao": null
+    },
+    {
+      "nome": "Devolução do contrato ao banco",
+      "status": "pendente",
+      "data": null,
+      "observacao": null
+    },
+    {
+      "nome": "Pagamento ao vendedor",
+      "status": "pendente",
+      "data": null,
+      "observacao": null
+    }
+  ],
+  "atualizado_em": "23/07/2026"
+}

@@ -1,0 +1,115 @@
+{
+  "codigo": "52z0n98t",
+  "cliente": "Allysson Bruno Barbosa e Ana Flávia Faria Paiva",
+  "imovel": "Chácara",
+  "forma_pagamento": "Financiamento",
+  "status_geral": "Aguardando Documentação",
+  "cancelado": false,
+  "data_contrato": "28/01/2026",
+  "progresso_pct": 0,
+  "etapas": [
+    {
+      "nome": "Envio de documentos do comprador",
+      "status": "andamento",
+      "data": null,
+      "observacao": null
+    },
+    {
+      "nome": "Aprovação do crédito",
+      "status": "pendente",
+      "data": null,
+      "observacao": null
+    },
+    {
+      "nome": "Envio de documentos do vendedor",
+      "status": "pendente",
+      "data": null,
+      "observacao": null
+    },
+    {
+      "nome": "Vistoria do engenheiro",
+      "status": "pendente",
+      "data": null,
+      "observacao": null
+    },
+    {
+      "nome": "Aprovação do laudo de engenharia",
+      "status": "pendente",
+      "data": null,
+      "observacao": null
+    },
+    {
+      "nome": "Entrega ao correspondente bancário",
+      "status": "pendente",
+      "data": null,
+      "observacao": null
+    },
+    {
+      "nome": "Conformidade da documentação",
+      "status": "pendente",
+      "data": null,
+      "observacao": null
+    },
+    {
+      "nome": "Entrevista gerencial",
+      "status": "pendente",
+      "data": null,
+      "observacao": null
+    },
+    {
+      "nome": "Assinatura do contrato",
+      "status": "pendente",
+      "data": null,
+      "observacao": null
+    },
+    {
+      "nome": "Solicitação do ITBI",
+      "status": "pendente",
+      "data": null,
+      "observacao": null
+    },
+    {
+      "nome": "Pagamento do ITBI",
+      "status": "pendente",
+      "data": null,
+      "observacao": null
+    },
+    {
+      "nome": "Certidão de quitação do ITBI",
+      "status": "pendente",
+      "data": null,
+      "observacao": null
+    },
+    {
+      "nome": "Prenotação em cartório",
+      "status": "pendente",
+      "data": null,
+      "observacao": null
+    },
+    {
+      "nome": "Pagamento do registro",
+      "status": "pendente",
+      "data": null,
+      "observacao": null
+    },
+    {
+      "nome": "Registro do imóvel concluído",
+      "status": "pendente",
+      "data": null,
+      "observacao": null
+    },
+    {
+      "nome": "Devolução do contrato ao banco",
+      "status": "pendente",
+      "data": null,
+      "observacao": null
+    },
+    {
+      "nome": "Pagamento ao vendedor",
+      "status": "pendente",
+      "data": null,
+      "observacao": null
+    }
+  ],
+  "atualizado_em": "23/07/2026"
+}

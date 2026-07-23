@@ -1,0 +1,115 @@
+{
+  "codigo": "rpb5nopo",
+  "cliente": "Wagner Martins Bittencourt e Vânia Cristina de Souza",
+  "imovel": "Apto",
+  "forma_pagamento": "Financiamento",
+  "status_geral": "Finalizado",
+  "cancelado": false,
+  "data_contrato": "11/03/2026",
+  "progresso_pct": 76,
+  "etapas": [
+    {
+      "nome": "Envio de documentos do comprador",
+      "status": "pendente",
+      "data": null,
+      "observacao": null
+    },
+    {
+      "nome": "Aprovação do crédito",
+      "status": "concluido",
+      "data": "09/03/2026",
+      "observacao": null
+    },
+    {
+      "nome": "Envio de documentos do vendedor",
+      "status": "concluido",
+      "data": "19/03/2026",
+      "observacao": null
+    },
+    {
+      "nome": "Vistoria do engenheiro",
+      "status": "concluido",
+      "data": "23/03/2026",
+      "observacao": null
+    },
+    {
+      "nome": "Aprovação do laudo de engenharia",
+      "status": "concluido",
+      "data": "01/04/2026",
+      "observacao": null
+    },
+    {
+      "nome": "Entrega ao correspondente bancário",
+      "status": "pendente",
+      "data": null,
+      "observacao": null
+    },
+    {
+      "nome": "Conformidade da documentação",
+      "status": "concluido",
+      "data": "23/04/2026",
+      "observacao": null
+    },
+    {
+      "nome": "Entrevista gerencial",
+      "status": "concluido",
+      "data": "28/04/2026",
+      "observacao": null
+    },
+    {
+      "nome": "Assinatura do contrato",
+      "status": "concluido",
+      "data": "28/04/2026",
+      "observacao": null
+    },
+    {
+      "nome": "Solicitação do ITBI",
+      "status": "concluido",
+      "data": "29/04/2026",
+      "observacao": null
+    },
+    {
+      "nome": "Pagamento do ITBI",
+      "status": "pendente",
+      "data": null,
+      "observacao": null
+    },
+    {
+      "nome": "Certidão de quitação do ITBI",
+      "status": "pendente",
+      "data": null,
+      "observacao": null
+    },
+    {
+      "nome": "Prenotação em cartório",
+      "status": "concluido",
+      "data": "12/05/2026",
+      "observacao": null
+    },
+    {
+      "nome": "Pagamento do registro",
+      "status": "concluido",
+      "data": "18/05/2026",
+      "observacao": null
+    },
+    {
+      "nome": "Registro do imóvel concluído",
+      "status": "concluido",
+      "data": "08/06/2026",
+      "observacao": null
+    },
+    {
+      "nome": "Devolução do contrato ao banco",
+      "status": "concluido",
+      "data": "08/06/2026",
+      "observacao": null
+    },
+    {
+      "nome": "Pagamento ao vendedor",
+      "status": "concluido",
+      "data": "12/06/2026",
+      "observacao": null
+    }
+  ],
+  "atualizado_em": "23/07/2026"
+}

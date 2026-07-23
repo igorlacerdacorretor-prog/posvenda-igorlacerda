@@ -1,0 +1,61 @@
+{
+  "codigo": "eudohi9o",
+  "cliente": "Márcia Antônia de Magalhães",
+  "imovel": "Sala",
+  "forma_pagamento": "À vista",
+  "status_geral": "Aguardando Documentação",
+  "cancelado": false,
+  "data_contrato": "09/01/2026",
+  "progresso_pct": 0,
+  "etapas": [
+    {
+      "nome": "Solicitação do ITBI",
+      "status": "andamento",
+      "data": null,
+      "observacao": null
+    },
+    {
+      "nome": "Pagamento do ITBI",
+      "status": "pendente",
+      "data": null,
+      "observacao": null
+    },
+    {
+      "nome": "Certidão de quitação do ITBI",
+      "status": "pendente",
+      "data": null,
+      "observacao": null
+    },
+    {
+      "nome": "Entrega ao cartório de notas",
+      "status": "pendente",
+      "data": null,
+      "observacao": null
+    },
+    {
+      "nome": "Lavratura da escritura",
+      "status": "pendente",
+      "data": null,
+      "observacao": null
+    },
+    {
+      "nome": "Prenotação em cartório",
+      "status": "pendente",
+      "data": null,
+      "observacao": null
+    },
+    {
+      "nome": "Pagamento do registro",
+      "status": "pendente",
+      "data": null,
+      "observacao": null
+    },
+    {
+      "nome": "Registro do imóvel concluído",
+      "status": "pendente",
+      "data": null,
+      "observacao": null
+    }
+  ],
+  "atualizado_em": "23/07/2026"
+}

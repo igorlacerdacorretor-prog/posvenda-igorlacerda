@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Acompanhamento Pós-Venda | Igor Lacerda Imóveis</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* Se você tiver os arquivos da fonte Ametis (.woff2), coloque-os em
+     site/assets/fonts/ e descomente o bloco abaixo. Sem isso, o título
+     usa Poppins automaticamente como substituta. */
+  /*
+  @font-face {
+    font-family: 'Ametis';
+    src: url('./assets/fonts/Ametis-Bold.woff2') format('woff2');
+    font-weight: 700;
+    font-display: swap;
+  }
+  */
+
+  :root {
+    --navy: #162333;
+    --navy-light: #1e3049;
+    --navy-card: #1b2c42;
+    --gold: #b88d46;
+    --gold-light: #ffeca3;
+    --gray-line: #3a4a5f;
+    --gray-text: #8a97a8;
+    --white: #f4f2ec;
+    --font-heading: 'Ametis', 'Poppins', serif;
+    --font-body: 'Montserrat', sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--navy);
+    color: var(--white);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 0 40px;
+  }
+
+  .container {
+    width: 100%;
+    max-width: 620px;
+    padding: 32px 20px 0;
+  }
+
+  /* ---------- cabeçalho ---------- */
+  header.topo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 18px;
+    margin-bottom: 36px;
+  }
+
+  .logo {
+    height: 56px;
+    width: auto;
+  }
+
+  .info-cliente h1 {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    font-size: 1.5rem;
+    margin: 0 0 6px;
+    color: var(--white);
+  }
+
+  .info-cliente p {
+    margin: 0;
+    color: var(--gold-light);
+    font-size: 0.92rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  /* ---------- barra de progresso ---------- */
+  .progresso-wrap {
+    margin-bottom: 40px;
+  }
+
+  .progresso-legenda {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 10px;
+  }
+
+  .progresso-legenda span:first-child {
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--gray-text);
+  }
+
+  .progresso-legenda span.pct {
+    font-family: var(--font-heading);
+    font-size: 1.05rem;
+    color: var(--gold);
+    font-weight: 700;
+  }
+
+  .progresso-trilha {
+    height: 8px;
+    border-radius: 999px;
+    background: var(--navy-light);
+    overflow: hidden;
+    border: 1px solid var(--gray-line);
+  }
+
+  .progresso-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold) 0%, var(--gold-light) 100%);
+    border-radius: 999px;
+    transition: width 0.6s ease;
+  }
+
+  .status-geral {
+    margin-top: 14px;
+    font-size: 0.82rem;
+    color: var(--gray-text);
+    text-align: right;
+  }
+
+  .status-geral strong {
+    color: var(--gold-light);
+    font-weight: 600;
+  }
+
+  .banner-cancelado {
+    background: rgba(184, 141, 70, 0.12);
+    border: 1px solid var(--gold);
+    border-radius: 10px;
+    padding: 14px 16px;
+    font-size: 0.88rem;
+    color: var(--gold-light);
+    margin-bottom: 32px;
+  }
+
+  /* ---------- timeline ---------- */
+  .timeline {
+    position: relative;
+    padding-left: 46px;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 17px;
+    top: 6px;
+    bottom: 6px;
+    width: 2px;
+    background: var(--gray-line);
+  }
+
+  .etapa {
+    position: relative;
+    padding-bottom: 30px;
+  }
+
+  .etapa:last-child { padding-bottom: 0; }
+
+  .marcador {
+    position: absolute;
+    left: -46px;
+    top: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--navy);
+    border: 2px solid var(--gray-line);
+    z-index: 1;
+  }
+
+  .etapa.concluido .marcador {
+    background: var(--gold);
+    border-color: var(--gold);
+  }
+
+  .etapa.concluido .marcador svg { stroke: var(--navy); }
+
+  .etapa.andamento .marcador {
+    border-color: var(--gold-light);
+    box-shadow: 0 0 0 0 rgba(255, 236, 163, 0.55);
+    animation: pulso 1.8s infinite;
+  }
+
+  .etapa.andamento .marcador .ponto {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--gold-light);
+  }
+
+  .etapa.pendente .marcador .ponto {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--gray-line);
+  }
+
+  @keyframes pulso {
+    0%   { box-shadow: 0 0 0 0 rgba(255, 236, 163, 0.55); }
+    70%  { box-shadow: 0 0 0 10px rgba(255, 236, 163, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(255, 236, 163, 0); }
+  }
+
+  .card-etapa {
+    background: var(--navy-card);
+    border: 1px solid var(--gray-line);
+    border-radius: 12px;
+    padding: 16px 18px;
+    margin-top: -2px;
+  }
+
+  .etapa.concluido .card-etapa {
+    border-color: rgba(184, 141, 70, 0.45);
+  }
+
+  .etapa.andamento .card-etapa {
+    border-color: var(--gold-light);
+    background: rgba(255, 236, 163, 0.06);
+  }
+
+  .etapa.pendente .card-etapa {
+    opacity: 0.55;
+  }
+
+  .card-etapa .titulo-etapa {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 0.98rem;
+  }
+
+  .etapa.andamento .titulo-etapa {
+    color: var(--gold-light);
+  }
+
+  .tag-andamento {
+    font-family: var(--font-body);
+    font-size: 0.68rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--navy);
+    background: var(--gold-light);
+    padding: 3px 8px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+
+  .data-etapa {
+    margin: 6px 0 0;
+    font-size: 0.8rem;
+    color: var(--gray-text);
+  }
+
+  .etapa.concluido .data-etapa { color: var(--gold); }
+
+  .observacao {
+    margin: 10px 0 0;
+    padding-top: 10px;
+    border-top: 1px dashed var(--gray-line);
+    font-size: 0.82rem;
+    color: var(--white);
+    opacity: 0.85;
+    line-height: 1.5;
+  }
+
+  /* ---------- rodapé ---------- */
+  footer.rodape {
+    width: 100%;
+    max-width: 620px;
+    margin-top: 48px;
+    padding: 24px 20px 0;
+    border-top: 1px solid var(--navy-light);
+    text-align: center;
+    font-size: 0.76rem;
+    line-height: 1.9;
+    color: var(--gray-text);
+  }
+
+  footer.rodape strong {
+    color: var(--gold-light);
+    font-family: var(--font-heading);
+    letter-spacing: 0.03em;
+  }
+
+  /* ---------- estado de erro ---------- */
+  .erro-wrap {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 60px 24px;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  .erro-wrap .simbolo {
+    font-size: 2.2rem;
+    color: var(--gold);
+    margin-bottom: 18px;
+  }
+
+  .erro-wrap h1 {
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    margin: 0 0 12px;
+  }
+
+  .erro-wrap p {
+    font-size: 0.9rem;
+    color: var(--gray-text);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .oculto { display: none !important; }
+
+  @media (min-width: 480px) {
+    .info-cliente h1 { font-size: 1.75rem; }
+  }
+</style>
+</head>
+<body>
+
+  <div id="app-conteudo" class="container oculto">
+    <header class="topo">
+      <img class="logo" src="./assets/Igor_Lacerda_MD_1.png" alt="Igor Lacerda Imóveis" onerror="this.style.display='none'">
+      <div class="info-cliente">
+        <h1 id="nome-cliente">—</h1>
+        <p id="identificacao-imovel">—</p>
+      </div>
+    </header>
+
+    <div id="banner-cancelado" class="banner-cancelado oculto">
+      Este processo foi cancelado. Qualquer dúvida, fale diretamente com seu corretor pelos contatos abaixo.
+    </div>
+
+    <div class="progresso-wrap">
+      <div class="progresso-legenda">
+        <span>Progresso do processo</span>
+        <span class="pct"><span id="progresso-pct">0</span>%</span>
+      </div>
+      <div class="progresso-trilha">
+        <div id="progresso-fill" class="progresso-fill" style="width:0%"></div>
+      </div>
+      <div class="status-geral">Situação atual: <strong id="status-geral-texto">—</strong></div>
+    </div>
+
+    <div id="timeline" class="timeline"></div>
+  </div>
+
+  <div id="app-erro" class="erro-wrap oculto">
+    <div class="simbolo">◆</div>
+    <h1>Não encontramos esse acompanhamento</h1>
+    <p>O link pode estar incompleto ou desatualizado. Confira o link enviado pelo seu corretor ou entre em contato pelos telefones abaixo.</p>
+  </div>
+
+  <footer class="rodape">
+    <strong>Igor Lacerda Imóveis</strong><br>
+    CRECI MGF 43.843<br>
+    📞 Escritório: (31) 99553-1307 &nbsp;|&nbsp; 📲 Igor Lacerda: (31) 99619-1589
+  </footer>
+
+<script>
+(function () {
+  var ICONE_CHECK = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+
+  function mostrarErro() {
+    document.getElementById('app-erro').classList.remove('oculto');
+    document.getElementById('app-conteudo').classList.add('oculto');
+  }
+
+  function montarMarcador(status) {
+    if (status === 'concluido') return ICONE_CHECK;
+    return '<span class="ponto"></span>';
+  }
+
+  function renderizar(dados) {
+    document.getElementById('nome-cliente').textContent = dados.cliente || 'Cliente';
+
+    var identificacao = [dados.imovel, dados.forma_pagamento].filter(Boolean).join(' · ');
+    document.getElementById('identificacao-imovel').textContent = identificacao || 'Acompanhamento do processo';
+
+    document.getElementById('progresso-pct').textContent = dados.progresso_pct != null ? dados.progresso_pct : 0;
+    document.getElementById('progresso-fill').style.width = (dados.progresso_pct || 0) + '%';
+    document.getElementById('status-geral-texto').textContent = dados.status_geral || '—';
+
+    if (dados.cancelado) {
+      document.getElementById('banner-cancelado').classList.remove('oculto');
+    }
+
+    var timeline = document.getElementById('timeline');
+    timeline.innerHTML = '';
+
+    (dados.etapas || []).forEach(function (etapa) {
+      var item = document.createElement('div');
+      item.className = 'etapa ' + etapa.status;
+
+      var html = '';
+      html += '<div class="marcador">' + montarMarcador(etapa.status) + '</div>';
+      html += '<div class="card-etapa">';
+      html += '<div class="titulo-etapa"><span>' + etapa.nome + '</span>';
+      if (etapa.status === 'andamento') {
+        html += '<span class="tag-andamento">Em andamento</span>';
+      }
+      html += '</div>';
+      if (etapa.status === 'concluido' && etapa.data) {
+        html += '<p class="data-etapa">Concluído em ' + etapa.data + '</p>';
+      }
+      if (etapa.observacao) {
+        html += '<p class="observacao">' + etapa.observacao + '</p>';
+      }
+      html += '</div>';
+
+      item.innerHTML = html;
+      timeline.appendChild(item);
+    });
+
+    document.getElementById('app-conteudo').classList.remove('oculto');
+    document.title = (dados.cliente ? dados.cliente + ' | ' : '') + 'Pós-Venda | Igor Lacerda Imóveis';
+  }
+
+  function init() {
+    var params = new URLSearchParams(window.location.search);
+    var id = params.get('id');
+
+    if (!id || !/^[a-z0-9]+$/i.test(id)) {
+      mostrarErro();
+      return;
+    }
+
+    fetch('./data/' + encodeURIComponent(id) + '.json', { cache: 'no-store' })
+      .then(function (resp) {
+        if (!resp.ok) throw new Error('não encontrado');
+        return resp.json();
+      })
+      .then(renderizar)
+      .catch(mostrarErro);
+  }
+
+  init();
+})();
+</script>
+</body>
+</html>
