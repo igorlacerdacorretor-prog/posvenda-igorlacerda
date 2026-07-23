@@ -1,9 +1,9 @@
 # Atualiza as páginas de pós-venda a partir da planilha e publica no GitHub Pages.
-# Uso:  .\publicar.ps1 "C:\caminho\Pós Venda 2026.xlsx"
+# Uso:  .\publicar.ps1
+#       .\publicar.ps1 "C:\caminho\Outra Planilha.xlsx"   (para usar outro arquivo)
 
 param(
-    [Parameter(Mandatory = $true)]
-    [string]$Planilha
+    [string]$Planilha = "C:\Users\igorl\Desktop\Controle_de_Clientes_Igor_Lacerda_Imoveis_OTIMIZADO_3.xlsx"
 )
 
 $ErrorActionPreference = "Stop"

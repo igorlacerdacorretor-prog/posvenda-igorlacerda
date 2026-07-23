@@ -90,20 +90,30 @@ python gerar_paginas.py "Pós Venda 2026.xlsx" --aba "Pós Venda 2027"
 
 ## 5. Atualizações seguintes (o dia a dia)
 
-Depois da configuração inicial, cada atualização é só isso:
+O script lê direto da planilha mestre do CRM
+(`Controle_de_Clientes_Igor_Lacerda_Imoveis_OTIMIZADO_3.xlsx`, aba "Pós Venda
+2026") — não precisa manter um arquivo separado. Sempre que adicionar um
+cliente novo ou atualizar uma etapa nessa aba, salve o Excel e rode:
 
 ```powershell
-.\publicar.ps1 "Pós Venda 2026.xlsx"
+.\publicar.ps1
 ```
 
-Esse script roda o `gerar_paginas.py` e já faz `git add` + `commit` + `push`
+(sem precisar informar o caminho da planilha — já é o padrão do script).
+Esse comando roda o `gerar_paginas.py` e já faz `git add` + `commit` + `push`
 automaticamente. Em cerca de 1 minuto o GitHub Pages atualiza sozinho — o
 link enviado ao cliente continua o mesmo, só o conteúdo muda.
+
+Se quiser usar outra planilha pontualmente:
+
+```powershell
+.\publicar.ps1 "C:\caminho\Outra Planilha.xlsx"
+```
 
 Se preferir fazer manualmente:
 
 ```bash
-python gerar_paginas.py "Pós Venda 2026.xlsx"
+python gerar_paginas.py "C:\Users\igorl\Desktop\Controle_de_Clientes_Igor_Lacerda_Imoveis_OTIMIZADO_3.xlsx"
 git add docs/data codigos_clientes.csv
 git commit -m "Atualiza pós-venda"
 git push
