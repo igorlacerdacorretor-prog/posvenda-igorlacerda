@@ -10,7 +10,7 @@ O que o script faz:
     1. Lê a aba de pós-venda do Excel.
     2. Para cada venda, gera (ou reaproveita) um código único e aleatório
        que nunca muda entre execuções (guardado em codigos_clientes.csv).
-    3. Monta um JSON por cliente em site/data/<codigo>.json com as etapas
+    3. Monta um JSON por cliente em docs/data/<codigo>.json com as etapas
        do processo (Financiamento ou À vista), status de cada uma
        (pendente / andamento / concluído) e progresso geral.
     4. Gera links_para_enviar.csv com o link pronto de cada cliente para
@@ -238,7 +238,7 @@ def processar(caminho_excel: str, aba: str) -> None:
         writer.writeheader()
         writer.writerows(linhas_geradas)
 
-    print(f"\n{len(linhas_geradas)} página(s) de cliente geradas em site/data/")
+    print(f"\n{len(linhas_geradas)} página(s) de cliente geradas em docs/data/")
     print(f"Links prontos para enviar: {LINKS_PATH.name}\n")
     for linha in linhas_geradas:
         print(f"  {linha['cliente']}: {linha['link']}")
