@@ -5,6 +5,7 @@
   "forma_pagamento": "Financiamento",
   "status_geral": "Aguardando Documentação",
   "cancelado": false,
+  "finalizado": false,
   "data_contrato": "28/03/2026",
   "progresso_pct": 0,
   "etapas": [

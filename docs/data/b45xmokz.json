@@ -5,6 +5,7 @@
   "forma_pagamento": "Financiamento",
   "status_geral": "Em Andamento",
   "cancelado": false,
+  "finalizado": false,
   "data_contrato": "20/05/2026",
   "progresso_pct": 76,
   "etapas": [

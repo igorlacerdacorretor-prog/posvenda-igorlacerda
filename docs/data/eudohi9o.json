@@ -5,6 +5,7 @@
   "forma_pagamento": "À vista",
   "status_geral": "Aguardando Documentação",
   "cancelado": false,
+  "finalizado": false,
   "data_contrato": "09/01/2026",
   "progresso_pct": 0,
   "etapas": [

@@ -12,7 +12,10 @@ O que o script faz:
        que nunca muda entre execuções (guardado em codigos_clientes.csv).
     3. Monta um JSON por cliente em docs/data/<codigo>.json com as etapas
        do processo (Financiamento ou À vista), status de cada uma
-       (pendente / andamento / concluído) e progresso geral.
+       (pendente / andamento / concluído / desconsiderada) e progresso geral.
+       Etapas em branco anteriores à última concluída são marcadas como
+       "desconsiderada" (não se aplicaram a essa venda) e não entram no
+       cálculo de progresso nem aparecem para o cliente.
     4. Gera links_para_enviar.csv com o link pronto de cada cliente para
        você copiar e colar no WhatsApp.
 
@@ -143,6 +146,11 @@ def montar_etapas(ws, numero_linha: int, definicoes: list[tuple[str, str, str]])
         concluida = valor not in (None, "")
         if concluida:
             status = "concluido"
+        elif idx < ultima_concluida_idx:
+            # Etapa em branco mas anterior à última concluída: foi
+            # desconsiderada nesse processo (não se aplicou a essa venda),
+            # não é uma pendência real.
+            status = "desconsiderada"
         elif idx == ultima_concluida_idx + 1:
             status = "andamento"
         else:
@@ -159,10 +167,31 @@ def montar_etapas(ws, numero_linha: int, definicoes: list[tuple[str, str, str]])
 
 
 def calcular_progresso(etapas: list[dict]) -> int:
-    if not etapas:
+    aplicaveis = [e for e in etapas if e["status"] != "desconsiderada"]
+    if not aplicaveis:
         return 0
-    concluidas = sum(1 for e in etapas if e["status"] == "concluido")
-    return round(100 * concluidas / len(etapas))
+    concluidas = sum(1 for e in aplicaveis if e["status"] == "concluido")
+    return round(100 * concluidas / len(aplicaveis))
+
+
+def calcular_dias(data_contrato_raw, datas_concluidas_raw: list, finalizado: bool) -> dict | None:
+    if not isinstance(data_contrato_raw, (date, datetime)):
+        return None
+    inicio = data_contrato_raw.date() if isinstance(data_contrato_raw, datetime) else data_contrato_raw
+
+    datas_concluidas = [
+        (v.date() if isinstance(v, datetime) else v)
+        for v in datas_concluidas_raw
+        if isinstance(v, (date, datetime))
+    ]
+
+    if finalizado and datas_concluidas:
+        fim = max(datas_concluidas)
+        dias = (fim - inicio).days
+        return {"dias": dias, "rotulo": f"{dias} dias (concluído)"}
+
+    dias = (date.today() - inicio).days
+    return {"dias": dias, "rotulo": f"{dias} dias em andamento"}
 
 
 def etapa_atual_de(etapas: list[dict], progresso_pct: int, cancelado: bool) -> str:
@@ -179,7 +208,8 @@ def etapa_atual_de(etapas: list[dict], progresso_pct: int, cancelado: bool) -> s
 def montar_painel(clientes: list[dict]) -> None:
     linhas_html = []
     for c in clientes:
-        cor_status = "#b88d46" if c["cancelado"] else ("#ffeca3" if c["progresso_pct"] < 100 else "#7fd88f")
+        cor_status = "#b88d46" if c["cancelado"] else ("#4caf7d" if c["progresso_pct"] >= 100 else "#ffeca3")
+        dias_rotulo = c["dias_rotulo"] or "—"
         linhas_html.append(f"""
         <tr>
           <td class="nome">
@@ -191,6 +221,7 @@ def montar_painel(clientes: list[dict]) -> None:
             <span class="pct">{c['progresso_pct']}%</span>
           </td>
           <td class="etapa-atual" style="color:{cor_status}">{c['etapa_atual']}</td>
+          <td class="dias">{dias_rotulo}</td>
           <td><a class="link" href="{c['link']}" target="_blank" rel="noopener">Abrir página ↗</a></td>
         </tr>""")
 
@@ -212,6 +243,7 @@ def montar_painel(clientes: list[dict]) -> None:
   .barra-fill {{ height:100%; border-radius:999px; }}
   .pct {{ margin-left: 8px; font-size: 0.8rem; color:#8a97a8; }}
   .etapa-atual {{ font-weight: 600; }}
+  .dias {{ color:#8a97a8; font-size: 0.82rem; white-space: nowrap; }}
   .link {{ color:#ffeca3; text-decoration:none; font-size:0.85rem; }}
   .link:hover {{ text-decoration:underline; }}
 </style>
@@ -221,7 +253,7 @@ def montar_painel(clientes: list[dict]) -> None:
   <p class="aviso">Uso pessoal. Este arquivo não é público e não deve ser enviado a clientes. Gerado em {date.today().strftime('%d/%m/%Y')}.</p>
   <table>
     <thead>
-      <tr><th>Cliente</th><th>Progresso</th><th>Etapa atual</th><th>Link</th></tr>
+      <tr><th>Cliente</th><th>Progresso</th><th>Etapa atual</th><th>Dias</th><th>Link</th></tr>
     </thead>
     <tbody>
       {''.join(linhas_html)}
@@ -272,10 +304,21 @@ def processar(caminho_excel: str, aba: str) -> None:
         etapas = montar_etapas(ws, numero_linha, definicoes)
 
         cancelado = status_geral.lower() == "cancelado"
+        finalizado = status_geral.lower() == "finalizado"
         if cancelado:
             for etapa in etapas:
                 if etapa["status"] == "andamento":
                     etapa["status"] = "pendente"
+
+        # Quando a venda está marcada como "Finalizado" na planilha, a barra
+        # de progresso mostra 100% (verde), mesmo que alguma etapa individual
+        # tenha ficado sem data preenchida.
+        progresso_pct = 100 if finalizado else calcular_progresso(etapas)
+
+        datas_concluidas_raw = [
+            ws[f"{coluna}{numero_linha}"].value for coluna, _n, _a in definicoes
+        ]
+        dias_info = calcular_dias(data_contrato, datas_concluidas_raw, finalizado)
 
         dados_cliente = {
             "codigo": codigo,
@@ -284,8 +327,9 @@ def processar(caminho_excel: str, aba: str) -> None:
             "forma_pagamento": forma_pagamento or None,
             "status_geral": status_geral or None,
             "cancelado": cancelado,
+            "finalizado": finalizado,
             "data_contrato": valor_data(data_contrato),
-            "progresso_pct": calcular_progresso(etapas),
+            "progresso_pct": progresso_pct,
             "etapas": etapas,
             "atualizado_em": date.today().strftime("%d/%m/%Y"),
         }
@@ -304,9 +348,10 @@ def processar(caminho_excel: str, aba: str) -> None:
                 "link": link,
                 "imovel": dados_cliente["imovel"],
                 "forma_pagamento": dados_cliente["forma_pagamento"],
-                "progresso_pct": dados_cliente["progresso_pct"],
+                "progresso_pct": progresso_pct,
                 "cancelado": cancelado,
-                "etapa_atual": etapa_atual_de(etapas, dados_cliente["progresso_pct"], cancelado),
+                "etapa_atual": "Finalizado" if finalizado else etapa_atual_de(etapas, progresso_pct, cancelado),
+                "dias_rotulo": dias_info["rotulo"] if dias_info else None,
             }
         )
 

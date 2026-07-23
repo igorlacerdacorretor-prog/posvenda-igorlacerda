@@ -27,6 +27,8 @@
     --navy-card: #1b2c42;
     --gold: #b88d46;
     --gold-light: #ffeca3;
+    --green: #4caf7d;
+    --green-light: #8fe2b4;
     --gray-line: #3a4a5f;
     --gray-text: #8a97a8;
     --white: #f4f2ec;
@@ -130,6 +132,14 @@
     background: linear-gradient(90deg, var(--gold) 0%, var(--gold-light) 100%);
     border-radius: 999px;
     transition: width 0.6s ease;
+  }
+
+  .progresso-fill.finalizado {
+    background: linear-gradient(90deg, var(--green) 0%, var(--green-light) 100%);
+  }
+
+  .progresso-wrap.finalizado .progresso-legenda span.pct {
+    color: var(--green-light);
   }
 
   .status-geral {
@@ -413,6 +423,11 @@
     document.getElementById('progresso-fill').style.width = (dados.progresso_pct || 0) + '%';
     document.getElementById('status-geral-texto').textContent = dados.status_geral || '—';
 
+    if (dados.finalizado) {
+      document.getElementById('progresso-fill').classList.add('finalizado');
+      document.getElementById('app-conteudo').querySelector('.progresso-wrap').classList.add('finalizado');
+    }
+
     if (dados.cancelado) {
       document.getElementById('banner-cancelado').classList.remove('oculto');
     }
@@ -420,7 +435,13 @@
     var timeline = document.getElementById('timeline');
     timeline.innerHTML = '';
 
-    (dados.etapas || []).forEach(function (etapa) {
+    // Etapas "desconsideradas" não se aplicaram a essa venda e não são
+    // mostradas ao cliente (não entram no progresso nem na timeline).
+    var etapasVisiveis = (dados.etapas || []).filter(function (etapa) {
+      return etapa.status !== 'desconsiderada';
+    });
+
+    etapasVisiveis.forEach(function (etapa) {
       var item = document.createElement('div');
       item.className = 'etapa ' + etapa.status;
 
