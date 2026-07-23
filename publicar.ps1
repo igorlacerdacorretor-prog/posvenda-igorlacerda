@@ -15,8 +15,15 @@ if ($LASTEXITCODE -ne 0) {
     exit 1
 }
 
-Write-Host "Enviando atualização para o GitHub..." -ForegroundColor Cyan
 git add docs/data "codigos_clientes.csv"
+
+$mudancas = git status --porcelain -- docs/data codigos_clientes.csv
+if (-not $mudancas) {
+    Write-Host "Nenhuma mudança nova em relação ao que já está publicado. Nada a enviar." -ForegroundColor Yellow
+    exit 0
+}
+
+Write-Host "Enviando atualização para o GitHub..." -ForegroundColor Cyan
 git commit -m "Atualiza pos-venda - $(Get-Date -Format 'dd/MM/yyyy HH:mm')"
 git push
 
